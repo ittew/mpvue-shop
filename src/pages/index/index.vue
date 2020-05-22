@@ -1,5 +1,12 @@
 <template>
   <div class="index">
+    <!-- 搜索框 -->
+    <div class="search-box">
+       <div class="search">
+        <span class="icon-sousuo"></span>
+          <input placeholder="请输入您要搜索的商品关键字">
+      </div>
+    </div>
     <!-- 轮播图 -->
     <div class="swiper">
       <swiper class="swiper-container" @change="swiperChange" autoplay="true" interval="3000" circular="true" duration="500">
@@ -17,10 +24,10 @@
     </div>
     <!-- 公告 -->
     <div class="hot-swiper">
-      <span class="icon-hot"></span>
+      <span class="icon-laba"></span>
       <swiper class="swiper-container " vertical autoplay="true" interval="3000" circular="true" duration="500">
         <block v-for="(item, index) in hotData" :key="index" >
-          <swiper-item class="swiper-item">
+          <swiper-item class="swiper-item" @click="jumpNewDetail">
             <div class="item ellipsis">{{item}}</div>
           </swiper-item>
         </block>
@@ -31,6 +38,31 @@
       <div @click="categoryList(item.id)" v-for="(item, index) in iconList" :key="index">
         <img :src="item.url" alt="">
         <p>{{item.name}}</p>
+      </div>
+    </div>
+    <!-- 推荐品牌 -->
+    <div class="contentList grayLine" v-for="(v,i) in brandList" :key="i">
+      <div class="barTitle">
+        <div class="Title-left"><span class="icons-recommend" :class="v.icon" :style="{color:v.color}"></span><span class="title-content">{{v.title}}</span></div>
+      </div>
+      <div class="brand-sublist">
+        <div v-for="(subitem, subindex) in v.goodsList" :key="subindex" @click="jumpDetail('brand')">
+          <img :src="subitem.url" alt="">
+        </div>
+      </div>
+    </div>
+    <!-- 推荐商品 -->
+    <div class="contentList grayLine" v-for="(v,i) in recommdContent" :key="i">
+      <div class="barTitle">
+        <div class="Title-left"><span class="icons-recommend" :class="v.icon" :style="{color:v.color}"></span><span class="title-content">{{v.title}}</span></div>
+        <div class="Title-right" @tap="gotoList">查看全部<img src="/static/images/right-arrow.png" alt=""></div>
+      </div>
+      <div class="sublist">
+        <div v-for="(subitem, subindex) in v.goodsList" :key="subindex" @click="jumpDetail">
+          <img :src="subitem.url" alt="">
+          <p class="ellipsis-two">{{subitem.name}}</p>
+          <p>￥{{subitem.retail_price}}</p>
+        </div>
       </div>
     </div>
     <!-- 商品内容 -->
@@ -67,32 +99,86 @@ export default {
         'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1588335011823&di=e029ad038155e81e40141036243682b4&imgtype=0&src=http%3A%2F%2Fb-ssl.duitang.com%2Fuploads%2Fitem%2F201708%2F25%2F20170825101131_JSMer.jpeg',
         'http://img1.imgtn.bdimg.com/it/u=2565047914,1661736801&fm=26&gp=0.jpg'
       ],
-      hotData: ['111111111111111111111111111111111111111111111111111111111111111111111','22222222222222222222222222222222222222222222222222222222222','333333333333333333333333333333333333333333'],
+      hotData: ['5G新基建如何激活万亿市场？','5G领衔新基建，网络建设走在前——我国5G网络建设分析','5G“新基建”，新场景、新模式'],
       iconList: [
         {
+          id: 0,
           url:'/static/images/icon/qq10.png',
           name: '促销活动'
         },
         {
-          url:'/static/images/icon/37.png',
+          id: 1,
+          url:'/static/images/icon/qq2.png',
           name: '特价'
         },
         {
+          id: 2,
           url:'/static/images/icon/qq16.png',
           name: '品牌'
         },
         {
-          url:'/static/images/icon/qq1.png',
+          id: 3,
+          url:'/static/images/icon/qq13.png',
           name: '推荐'
+        }
+      ],
+      recommdContent: [
+        {
+          color: '#FF69B4',
+          icon: 'icon-31_xinpin',
+          title: '推荐商品',
+          goodsList: [
+            {
+              url:'http://www.sbn.shop/images/201801/thumb_img/2887_thumb_G_1514836622108.jpg',
+              name:'惠普（HP）CH563Z 802 黑色墨盒',
+              retail_price:'59'
+            },{
+              url:'http://www.sbn.shop/images/201908/thumb_img/10772_thumb_G_1564595802738.jpg',
+              name:'扬帆耐立打印机碳粉YFHC',
+              retail_price:'59'
+            },{
+              url:'http://www.sbn.shop/images/201801/thumb_img/2887_thumb_G_1514836622108.jpg',
+              name:'惠普（HP）CH563Z 802 黑色墨盒',
+              retail_price:'59'
+            }
+          ]
+        }
+      ],
+      brandList: [
+        {
+          color: '#f2270c',
+          icon:'.icon-hot',
+          title: '推荐商家',
+          goodsList: [
+              {
+              url:'/static/images/huawei.jpg'
+            },{
+              url:'/static/images/lianxiang.jpg'
+            },{
+              url:'/static/images/hongji.jpg'
+            }
+          ]
         }
       ],
       content: [
         {
           color: '#FF69B4',
           icon: 'icon-31_xinpin',
-          title: '新品',
+          title: '电脑',
           goodsList: [
             {
+              url:'http://www.sbn.shop/images/201801/thumb_img/2887_thumb_G_1514836622108.jpg',
+              name:'惠普（HP）CH563Z 802 黑色墨盒',
+              retail_price:'59'
+            },{
+              url:'http://www.sbn.shop/images/201908/thumb_img/10772_thumb_G_1564595802738.jpg',
+              name:'扬帆耐立打印机碳粉YFHC',
+              retail_price:'59'
+            },{
+              url:'http://www.sbn.shop/images/201801/thumb_img/2887_thumb_G_1514836622108.jpg',
+              name:'惠普（HP）CH563Z 802 黑色墨盒',
+              retail_price:'59'
+            },{
               url:'http://www.sbn.shop/images/201801/thumb_img/2887_thumb_G_1514836622108.jpg',
               name:'惠普（HP）CH563Z 802 黑色墨盒',
               retail_price:'59'
@@ -110,9 +196,21 @@ export default {
         {
           color: '#f2270c',
           icon:'icon-tuijian',
-          title: '推荐',
+          title: '移动办公',
           goodsList: [
-             {
+            {
+              url:'http://www.sbn.shop/images/201812/thumb_img/10655_thumb_G_1544730403475.jpg',
+              name:'晨光签字笔12支',
+              retail_price:'59'
+            },{
+              url:'http://www.sbn.shop/images/201801/thumb_img/4462_thumb_G_1515625311762.jpg',
+              name:'得力9375薄型复写纸(蓝)(25.5*18.5cm)-16K',
+              retail_price:'59'
+            },{
+              url:'http://www.sbn.shop/images/201812/thumb_img/10655_thumb_G_1544730403475.jpg',
+              name:'晨光签字笔12支',
+              retail_price:'59'
+            },{
               url:'http://www.sbn.shop/images/201812/thumb_img/10655_thumb_G_1544730403475.jpg',
               name:'晨光签字笔12支',
               retail_price:'59'
@@ -129,7 +227,7 @@ export default {
         },{
           color: '#00BFFF',
           icon:'icon-bangong0',
-          title: '办公用品',
+          title: '信息安全',
           goodsList: [
             {
               url:'http://www.sbn.shop/images/201801/thumb_img/4860_thumb_G_1515966007157.jpg',
@@ -160,7 +258,7 @@ export default {
         },{
           color: '#40E0D0',
           icon:'icon-shumaweixiu',
-          title: '电子数码',
+          title: '网络设备',
           goodsList: [
             {
               url:'http://www.sbn.shop/images/201807/thumb_img/9578_thumb_G_1530731976148.jpg',
@@ -182,12 +280,16 @@ export default {
               url:'http://www.sbn.shop/images/201807/thumb_img/9578_thumb_G_1530731976148.jpg',
               name:'宏碁（Acer）TMP249 14英寸便携商务办公高清手提电脑',
               retail_price:'59'
+            },{
+              url:'http://www.sbn.shop/images/201807/thumb_img/9578_thumb_G_1530731976148.jpg',
+              name:'宏碁（Acer）TMP249 14英寸便携商务办公高清手提电脑',
+              retail_price:'59'
             }
           ]
         },{
           color: '#FA8072',
           icon:'icon-shenghuoguan',
-          title: '生活用品',
+          title: '存储',
           goodsList: [
             {
               url:'http://www.sbn.shop/images/201801/thumb_img/4611_thumb_G_1515696301432.jpg',
@@ -226,12 +328,52 @@ export default {
     swiperChange(e) {
       this.swiperCurrent = e.mp.detail.current
     },
-    gotoList() {},
-    // 跳转到商品详情
-    jumpDetail() {
+    categoryList (id) {
+      let url = ''
+      switch (id) {
+        case 0:
+        case 1:
+        case 3:
+          url = '/pages/list/main'
+          break;
+        case 2:
+          url = '/pages/brandList/main'
+          break;
+
+        default:
+          break;
+      }
       wx.navigateTo({
-        url: '/pages/good/main'
+        url
       })
+    },
+    jumpNewDetail() {
+      wx.navigateTo({
+        url: '/pages/newdetail/main'
+      })
+    },
+    gotoList(item) {
+      if(item=='brand') {
+        wx.navigateTo({
+          url: '/pages/brandList/main'
+        })
+      } else {
+        wx.switchTab({
+          url: '/pages/category/main'
+        })
+      }
+    },
+    // 跳转到商品详情
+    jumpDetail(item) {
+      if(item=='brand') {
+        wx.navigateTo({
+          url: '/pages/store/main'
+        })
+      } else {
+        wx.navigateTo({
+          url: '/pages/good/main'
+        })
+      }
     }
   }
 }
@@ -242,6 +384,32 @@ export default {
     background: #f4f4f4;
     height: 100%;
   }
+  /* 搜索框 */
+.search-box {
+  width: 100%;
+  padding: 12rpx 0;
+  background-color: #fff;
+}
+.search{
+  width: 90%;
+  height: 62rpx;
+  line-height: 62rpx;
+  display: flex;
+  align-items: center;
+  margin: 0 auto;
+  background-color: rgb(240, 240, 240);
+  padding: 0 20rpx;
+  border-radius: 35rpx;
+}
+.icon-sousuo {
+  margin-top: 3rpx;
+}
+.search input{
+  width: 90%;
+  height: 100%;
+  font-size: 24rpx;
+  margin-left: 12rpx;
+}
   // 轮播
   .swiper {
     width: 100%;
@@ -298,9 +466,9 @@ export default {
       height: 60rpx;
       line-height: 60rpx;
     }
-    .icon-hot {
+    .icon-laba {
       color:#f2270c;
-      margin: 4rpx 6rpx 0 0;
+      margin: 10rpx 6rpx 0 0;
       font-size: 40rpx;
     }
     .item {
@@ -357,6 +525,27 @@ export default {
       font-size: 30rpx;
     }
   }
+  .brand-sublist {
+    display: flex;
+    flex-wrap: wrap;
+    div {
+      width: 225rpx;
+      padding: 10rpx 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 0 8rpx;
+      img {
+        width: 100%;
+        height: 145rpx;
+        border-radius: 8rpx;
+      }
+    }
+  }
+  .icons-recommend {
+    font-size: 30rpx;
+    margin-top:2rpx;
+  }
   .icons {
     color: #f2270c;
     font-size: 28rpx;
@@ -380,6 +569,7 @@ export default {
   .sublist {
     display: flex;
     flex-wrap: wrap;
+    padding: 10rpx 0;
 
     div {
       width: 228rpx;

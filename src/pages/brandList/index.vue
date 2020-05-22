@@ -10,16 +10,13 @@
     </div>
 
     <scroll-view class="longinPage_scroll"  :scroll-y="true" @scroll="scroll" :scroll-into-view="toView" :scroll-with-animation="true">
-      <div class="Letter_city" v-for="(item,index) in brandData" :key="index" :id="item.letter">
+      <div class="Letter_city" v-for="(item,index) in brandData" :key="index" :id="item.letter" @click="jumpToList(item)">
         <div class="Letter_title">{{item.letter}}</div>
         <div v-for="(item2,index2) in item.childArr" :key="index2" class="letter-list">
           <img :src="item2.img" alt="">
           <div class="brand-name">{{item2.name}}</div>
         </div>
       </div>
-
-
-      <div class="box"></div>
 
     </scroll-view>
   </div>
@@ -104,6 +101,19 @@ export default {
         "name": "德峰",
         "img": "http://shop.029-smart.com/upload/brand/a7da11fb-7d22-42e3-978a-69b833803219.jpg"
         }]
+      },{
+      "letter": "G",
+      "childArr": [{
+        "linkageid": 110000,
+        "letter": "G",
+        "name": "戴尔",
+        "img": "http://shop.029-smart.com/upload/brand/257b0bbc-d07c-4d49-bcf0-5393a34d1299.jpg"
+        },{
+        "linkageid": 110000,
+        "letter": "G",
+        "name": "德峰",
+        "img": "http://shop.029-smart.com/upload/brand/a7da11fb-7d22-42e3-978a-69b833803219.jpg"
+        }]
       }],
       hotCity:[],
       thatnum: 0,
@@ -115,7 +125,7 @@ export default {
   },
   methods: {
     scroll(e) {
-      console.log(e.mp.detail.scrollTop)
+      // console.log(e.mp.detail.scrollTop)
     },
     addClassName (index,id) {
       wx.showToast({
@@ -127,13 +137,17 @@ export default {
       for (let i = 0; i < this.brandData.length; ++i) {
         if (this.brandData[i].letter == id) {
           this.toView= this.brandData[i].letter
-          console.log(this.toView)
+          // console.log(this.toView)
           break
         }
       }
     },
     jumpToList(val) {
-      console.log(val)
+       wx.showToast({
+        title: val.letter+'跳转',
+        icon: 'none',
+        duration: 2000
+      })
     }
   }
 }
@@ -145,19 +159,23 @@ page {
  /* 搜索框 */
 .search{
   width: 90%;
+  height: 62rpx;
+  line-height: 62rpx;
   display: flex;
   align-items: center;
   margin: 0 auto;
   background-color: rgb(240, 240, 240);
-  padding: 10rpx 20rpx;
+  padding: 0 20rpx;
   border-radius: 35rpx;
 }
-
+.icon-sousuo {
+  margin-top: 3rpx;
+}
 .search input{
   width: 90%;
   height: 100%;
-  font-size: 29rpx;
-  margin-left: 20rpx;
+  font-size: 24rpx;
+  margin-left: 12rpx;
 }
 .longinPage{
   position: fixed;
@@ -165,14 +183,14 @@ page {
   left: 0;
   z-index: 50;
   width: 100%;
-  height: 600rpx;
+  height: 100%;
   padding-right: 9%;
   box-sizing: border-box;
   overflow: hidden;
 }
 .longinPage_scroll{
   width: 100%;
-  height: 100%;
+  height: 94%;
 }
 .bottom_text{
   font-size: 20px;
@@ -184,12 +202,12 @@ page {
   right: 10px;
   top: 80px;
   z-index: 100;
-  width: 25px;
+  width: 27px;
   overflow: hidden;
 }
 .Letter_list{
-  width: 25px;
-  height: 25px;
+  width: 27px;
+  height: 27px;
   font-size: 14px;
   color: #f2270c;
   text-align: center;
@@ -223,23 +241,28 @@ page {
   justify-content:space-between;
   flex-wrap: wrap;
 }
+.Letter_city {
+  margin: 12rpx 0;
+}
 .Letter_title{
   background: #f4f4f4;
   font-size: 26rpx;
   height: 44rpx;
   line-height: 44rpx;
-  margin: 12rpx 0;
   padding-left: 3%;
 }
 .letter-list {
   padding-left: 3%;
   display: flex;
-  height: 110rpx;
-  line-height: 110rpx;
   img {
     width: 102rpx;
     height: 102rpx;
     border: 2rpx solid #e5e5e5;
+    margin-top:12rpx;
+  }
+  .brand-name {
+    display: flex;
+    align-items: center;
   }
 }
 .brand-name{
@@ -255,10 +278,6 @@ page {
   border-radius: 5px;
   color: #fff;
   font-size: 16px;
-}
-.box{
-  width: 100%;
-  height: 30px;
 }
 
 /*隐藏滚动条*/

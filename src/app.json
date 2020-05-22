@@ -1,7 +1,10 @@
 {
   "pages": [
-    "pages/store/main",
     "pages/index/main",
+    "pages/newdetail/main",
+    "pages/sortlist/main",
+    "pages/store/main",
+    "pages/list/main",
     "pages/brandList/main",
     "pages/couponList/main",
     "pages/orderList/main",
